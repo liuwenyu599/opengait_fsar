@@ -1,0 +1,56 @@
+# Python 缓存
+__pycache__/
+*.pyc
+
+# 日志和检查点
+logs/
+*.log
+
+# 临时文件
+*.tmp
+*.swp
+
+# 数据集或模型大文件
+*.pth
+*.ckpt
+
+# 数据集（只保留本地，不上传 GitHub）
+data/
+output/CASIABFusion/PAGFSLModel/PAGFSL_Fusion/logs
+output/CASIABFusion/PAGFSLModel/PAGFSL_Fusion/summary
+
+
+
+# ===== OpenGait experiment outputs (local only) =====
+output/CASIABFusion/PAGFSLModel/PAGFSL_Fusion/logs/
+output/CASIABFusion/PAGFSLModel/PAGFSL_Fusion/summary/
+
+# ===== OpenGait datasets (local only) =====
+opengait/data/
+
+# outputs
+output/
+logs/
+summary/
+
+# datasets
+data/
+datasets/
+
+# weights
+*.pt
+*.pth
+*.ckpt
+
+# python
+__pycache__/
+*.pyc
+*.log
+
+# outputs & checkpoints
+output/
+*.pt
+*.pth
+*.ckpt
+*.log
+*.tfevents*

@@ -1,0 +1,90 @@
+data_cfg:
+  dataset_name: CASIA-B
+  dataset_root: /home/lwy/projects/OpenGait-master/data
+  dataset_partition: ./datasets/CASIA-B/CASIA-B.json
+  num_workers: 4
+  remove_no_gallery: false
+  test_dataset_name: CASIA-B
+  data_in_use: [True, False]
+
+evaluator_cfg:
+  enable_float16: false
+  restore_ckpt_strict: false
+  restore_hint: 0
+  save_name: PAGFSL_Fusion
+  eval_func: evaluate_indoor_dataset
+  sampler:
+    batch_size: 2
+    sample_type: all_ordered
+    type: InferenceSampler
+    frames_skip_num: 0
+    frames_all_limit: 720
+  metric: euc
+  transform:
+    - type: BaseSilCuttingTransform
+    # - type: NoOperation
+
+loss_cfg:
+  - loss_term_weight: 1.0
+    margin: 0.2
+    type: TripletLoss
+    log_prefix: triplet
+  - loss_term_weight: 1.0
+    scale: 16
+    type: CrossEntropyLoss
+    log_prefix: softmax
+
+model_cfg:
+  model: PAGFSLModel
+  Common_Dim: 512
+  bin_list: [1, 2, 4, 8, 16]
+  num_classes: 74
+  pretrained_backbone: false
+  debug_flow: true
+  monitor_enable: True
+  monitor_every: 200
+  monitor_dir: output/CASIA-B/PAGFSLModel/PAGFSL_Fusion/pic
+  monitor_triplet_margin: 0.2
+  seed: 0
+optimizer_cfg:
+  solver: AdamW
+  lr: 0.0001
+  weight_decay: 0.0005
+  momentum: 0.9
+
+scheduler_cfg:
+  scheduler: MultiStepLR
+  gamma: 0.1
+  milestones: [1000, 1500, 1800]
+
+trainer_cfg:
+  find_unused_parameters: false
+  enable_float16: false
+  with_test: true
+  fix_BN: false
+  log_iter: 1000
+  restore_ckpt_strict: false
+  optimizer_reset: false
+  scheduler_reset: false
+  restore_hint: 0
+  save_iter: 100
+  save_name: PAGFSL_Fusion
+  sync_BN: true
+  total_iter: 1000
+  sampler:
+    batch_shuffle: true
+    batch_size: [8, 8]         # P=8, K=8
+    frames_num_fixed: 60
+    frames_num_max: 60
+    frames_num_min: 30
+    sample_type: fixed_ordered
+    frames_skip_num: 0
+    type: TripletSampler
+  transform:
+    - type: BaseSilCuttingTransform
+    # - type: NoOperation
+
+
+engine_cfg:
+  use_amp: True
+  amp_dtype: bf16
